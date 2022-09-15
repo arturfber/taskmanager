@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Tempo de geração: 15-Set-2022 às 02:52
+-- Tempo de geração: 15-Set-2022 às 03:59
 -- Versão do servidor: 10.6.5-MariaDB
 -- versão do PHP: 7.4.26
 
@@ -51,16 +51,26 @@ INSERT INTO `accounts` (`id`, `name`, `password`, `email`, `phone`, `permissions
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `accounts_tasks`
+-- Estrutura da tabela `account_permissions`
 --
 
-DROP TABLE IF EXISTS `accounts_tasks`;
-CREATE TABLE IF NOT EXISTS `accounts_tasks` (
-  `id` int(11) NOT NULL,
-  `account_id` int(11) NOT NULL,
-  `task_id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `account_permissions`;
+CREATE TABLE IF NOT EXISTS `account_permissions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `permission_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Extraindo dados da tabela `account_permissions`
+--
+
+INSERT INTO `account_permissions` (`id`, `user_id`, `permission_id`) VALUES
+(1, 5, 1),
+(2, 6, 2),
+(3, 6, 3),
+(4, 6, 4);
 
 -- --------------------------------------------------------
 
@@ -116,30 +126,6 @@ INSERT INTO `tasks` (`id`, `name`, `description`, `creation_date`, `conclusion_d
 (20, 'TEste de yusyarui', 'descriÃ§Ã£o', '2022-09-15', NULL, 'Pendente', 20),
 (18, 'teeste', 'teste', '2022-09-15', NULL, 'Pendente', 6),
 (19, 'tese', 'teste', '2022-09-15', NULL, 'Pendente', 6);
-
--- --------------------------------------------------------
-
---
--- Estrutura da tabela `user_permissions`
---
-
-DROP TABLE IF EXISTS `user_permissions`;
-CREATE TABLE IF NOT EXISTS `user_permissions` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `permission_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Extraindo dados da tabela `user_permissions`
---
-
-INSERT INTO `user_permissions` (`id`, `user_id`, `permission_id`) VALUES
-(1, 5, 1),
-(2, 6, 2),
-(3, 6, 3),
-(4, 6, 4);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

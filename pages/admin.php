@@ -53,7 +53,7 @@ require_once "../tasks/list.php";
 
                             foreach ($ids as $key => $id) {
 
-                                $sql = "SELECT user_id, name, permission FROM `user_permissions` INNER JOIN permissions on permissions.id = user_permissions.permission_id INNER JOIN accounts on accounts.id - user_permissions.user_id WHERE user_id = $id[id]";
+                                $sql = "SELECT user_id, name, permission FROM `account_permissions` INNER JOIN permissions on permissions.id = account_permissions.permission_id INNER JOIN accounts on accounts.id - account_permissions.user_id WHERE user_id = $id[id]";
 
                                 $result = $con->query($sql);
                                 $accounts = [];

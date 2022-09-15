@@ -4,7 +4,7 @@
     session_start();
     require_once('../connection.php');
 
-    $sql = "SELECT accounts.id FROM accounts INNER JOIN user_permissions user_perm on user_perm.user_id = $_SESSION[id] INNER JOIN permissions on permissions.id = user_perm.permission_id WHERE accounts.id = $_SESSION[id] AND permissions.id = 1";
+    $sql = "SELECT accounts.id FROM accounts INNER JOIN account_permissions user_perm on user_perm.user_id = $_SESSION[id] INNER JOIN permissions on permissions.id = user_perm.permission_id WHERE accounts.id = $_SESSION[id] AND permissions.id = 1";
 
     $result = $con->query($sql);
 
