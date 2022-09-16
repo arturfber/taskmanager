@@ -1,6 +1,8 @@
 <?php
     session_start();
     require_once('../database.php');
+    require_once "../util/functions.php";
+    
 
     $data = [];
     foreach ($_POST as $key => $value) {
@@ -20,9 +22,10 @@
         $result = $result[0];
 
         if(password_verify($data['password'], $result['password'])){
-            $_SESSION['login'] = true;
-            $_SESSION['name'] = $result['name'];
+            $_SESSION['logged'] = true;
             $_SESSION['id'] = $result['id'];
+            $_SESSION['name'] = $result['name'];
+            $_SESSION['permissions'] = get_account_permissions($result['id']);
             $_SESSION['error'] = '';
             header("Location: route.php");
         } else {

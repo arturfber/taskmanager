@@ -1,6 +1,14 @@
 <?php
 require_once "../modules/header.php";
 require_once "../tasks/list.php";
+
+
+$edit = $_SESSION['permissions']['edit'] == "true" ? "<button type='button' class='btn btn-secondary ms-2 edit' data-bs-toggle='modal' data-bs-target='#edit_task_modal'><i class='bi bi-pencil-square fs-4'></i></button>" : '';
+
+$insert = $_SESSION['permissions']['insert'] == "true" ? "<button type='button' class='btn btn-success ms-auto d-block' data-bs-toggle='modal' data-bs-target='#add_task_modal'><i class='bi bi-plus-circle me-2'></i>Adicionar Tarefa</button>" : '';
+
+$delete = $_SESSION['permissions']['delete'] == "true" ? "<form method='post' action='../tasks/delete.php' delete'><input type='hidden' name='id'><button type='button' class='btn btn-danger m-auto d-block inline-delete'><i class='bi bi-trash'></i></button></form>" : '';
+
 ?>
 
 
@@ -13,58 +21,20 @@ require_once "../tasks/list.php";
         </h3>
 
         <h4 class="position-absolute mt-4 me-4 bottom-0 start-0 ms-4 mb-4">
-            <a class="badge bg-danger" href="../login/logout.php">Sair</a>
+            <a class="badge bg-danger text-decoration-none py-2 px-3 color-black" href="../login/logout.php">
+                <i class="bi bi-box-arrow-left me-2"></i>    
+                Sair
+            </a>
         </h4>
 
-    
         <!-- Content -->
         <section class="row">
-            <aside class="col-3 vh-100 m-0 bg-white">
-                <nav class="navbar navbar-light px-4 py-5">
-                    <div class="container-fluid justify-content-center">
-                        <div class="navbar" id="navbarNav">
-                            <ul class="navbar-nav px-5 h3 text-nowrap">
-                                <li class="nav-item px-4 my-2 selected">
-                                    <a class="nav-link text-black" href="#">
-                                        <span role="img" aria-label="All Tasks icon" class="all"></span>
-                                        Todas
-                                    </a>
-                                </li>
-                                <li class="nav-item px-4 my-2">
-                                    <a class="nav-link text-black" href="#">
-                                        <span role="img" aria-label="Today Icon" class="today"></span>
-                                        Today
-                                    </a>
-                                </li>
-                                <li class="nav-item px-4 my-2">
-                                    <a class="nav-link text-black" href="#">
-                                        <span role="img" aria-label="Important Icon" class="important"></span>
-                                        Important
-                                    </a>
-                                </li>
-                                <li class="nav-item px-4 my-2">
-                                    <a class="nav-link text-black" href="#">
-                                        <span role="img" aria-label="Upcoming Icon" class="upcoming"></span>
-                                        Upcoming
-                                    </a>
-                                </li>
-                                <li class="nav-item px-4 my-2">
-                                    <a class="nav-link text-black" href="#">
-                                        <span role="img" aria-label="Completed Icon" class="completed"></span>
-                                        Completed
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </nav>
-            </aside>
-            <section class="col-9 d-flex flex-column justify-content-evenly vh-100 m-0 px-5 py-4 bg-info">
+            <section class="col-12 d-flex flex-column justify-content-evenly vh-100 m-0 px-5 py-4 bg-light">
 
-                <h1 class="text-white border-bottom border-5 border-white display-3 text-uppercase mb-3">Todas</h1>
+                <h1 class="text-black border-bottom border-5 border-black display-3 text-uppercase mb-3">Tarefas</h1>
 
-                <div class="content overflow-auto border-bottom border-2 border-white">
-                    <table class="table text-white">
+                <div class="content overflow-auto border-bottom border-2 border-black">
+                    <table class="table text-black main-table table-striped">
                         <thead class="h3">
                             <tr>
                                 <th scope="col">ID</th>
@@ -73,7 +43,8 @@ require_once "../tasks/list.php";
                                 <th scope="col">Criação</th>
                                 <th scope="col">Conclusão</th>
                                 <th scope="col">Status</th>
-                                <th scope="col">Ação</th>
+                                <th scope="col" class="edit">Editar</th>
+                                <th scope="col" class="delete">Excluir</th>
                             </tr>
                         </thead>
                         <tbody class="h4">
@@ -86,18 +57,21 @@ require_once "../tasks/list.php";
 
                                 $badge = $task['status'] == 'Concluido' ? "success" : "danger";
 
-                                echo " 
-                                    <tr>
-                                        <th id='id'>$task[id]</th>
-                                        <td><p id='name'>$task[name]</p></td>
-                                        <td>
-                                            <p id='description'>$task[description]</p>
-                                        </td>
-                                        <td>$creation_date</td>
-                                        <td class='text-center'>$conclusion_date</td>
-                                        <td><span id='status' class='badge bg-$badge'>$task[status]</span></td>
-                                        <td><button type='button' class='btn btn-secondary ms-2 edit' data-bs-toggle='modal' data-bs-target='#edit_task_modal'><i class='bi bi-pencil-square fs-4'></i></button></td>
-                                    </tr>";
+                                if($_SESSION['permissions']['view'] == "true"){
+                                    echo " 
+                                        <tr>
+                                            <td id='id'>$task[id]</td>
+                                            <td><p id='name' class='m-0'>$task[name]</p></td>
+                                            <td>
+                                                <p id='description' class='m-0'>$task[description]</p>
+                                            </td>
+                                            <td>$creation_date</td>
+                                            <td class='text-center'>$conclusion_date</td>
+                                            <td><p id='status' class='m-0 badge bg-$badge'>$task[status]</p></td>
+                                            <td>$edit</td>
+                                            <td>$delete</td>
+                                        </tr>";
+                                }
                             }
                             ?>
 
@@ -105,12 +79,31 @@ require_once "../tasks/list.php";
                     </table>
                 </div>
 
-                <div class="mt-3">
-                    <button type="button" class="btn btn-success ms-auto d-block" data-bs-toggle="modal" data-bs-target="#add_task_modal">Adicionar</button>
+                <div class='mt-3 d-flex'>
+
+                    <?php
+                    if($_SESSION['permissions']['print'] == "true"){
+                        echo "
+                        <a href='../util/export_xls.php' class='btn btn-success ms-auto d-block'>
+                            <i class='bi bi-file-earmark-spreadsheet me-1'></i>
+                            Exportar em .XLS
+                        </a>
+
+                        <button class='btn btn-danger ms-auto d-block pdf'>
+                            <i class='bi bi-file-earmark-pdf me-1'></i>
+                            Exportar em .PDF
+                        </button>";
+                        }
+                    ?>
+                    
+                
+                    <?php echo $insert ?>
                 </div>
+                
             </section>
         </section>
 
+        
         <!-- Add Task Modal -->
         <div class="modal fade" id="add_task_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="add_task_modalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">

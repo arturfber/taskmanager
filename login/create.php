@@ -24,7 +24,7 @@
         $result = $db->insert('accounts', $data);
         $id = $db->select('accounts', "id", ['email' => $data['email']], '1')[0]['id']; 
         
-        $_SESSION['login'] = true;
+        $_SESSION['logged'] = true;
         $_SESSION['name'] = $data['name'];
         $_SESSION['id'] = $id;
         $_SESSION['error'] = '';

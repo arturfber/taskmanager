@@ -59,3 +59,57 @@ if(get(".edit")){
         }
     });
 }
+
+// Inline Delete Button
+if(get(".inline-delete")){
+    let buttons = getAll(".inline-delete")
+    buttons.forEach(button => {
+        button.onclick = () => {
+            let id = button.closest("tr").querySelector("#id").innerText,
+                form = button.closest("form"),
+                input = form.querySelector("input")
+
+            input.value = id
+
+            form.submit()
+        }
+    });
+}
+
+// Admin form update
+if(get("table.admin")){
+    let buttons = getAll("table.admin tbody tr button")
+
+    buttons.forEach(button => {
+        button.onclick = () => {
+            let tr = button.closest("tr"),
+                form = button.closest("form")
+                inputs = tr.querySelectorAll("td input")
+                send_inputs = form.querySelectorAll("input")
+
+                send_inputs.forEach(send_input => {
+                    inputs.forEach(input => {
+                        if(input.name == send_input.name){
+                            input.checked == true ? send_input.value = 'true' : send_input.value = 'false'
+                        }
+                    });
+                });
+                
+                console.log(form.querySelectorAll("form input").value);
+                
+                form.submit()
+
+        }
+    });
+}
+
+// Export into PDF
+if(get("button.pdf")){
+    get("button.pdf").onclick = () => {
+        $(".main-table").tableHTMLExport({ 
+            type: "pdf", 
+            filename: "tasks.pdf" ,
+            ignoreColumns:'.edit, .delete'
+        });
+    }
+}
